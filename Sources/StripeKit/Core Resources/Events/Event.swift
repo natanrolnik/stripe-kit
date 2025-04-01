@@ -55,7 +55,7 @@ public struct Event: Codable {
 public struct EventData: Codable {
     /// Object containing the API resource relevant to the event. For example, an `invoice.created` event will have a full [invoice object](https://stripe.com/docs/api/events/object#invoice_object) as the value of the object key.
     public var object: EventObject
-    
+
     // TODO: - Figure out how to decode this.
     /// Object containing the names of the attributes that have changed, and their previous values (sent along only with *.updated events).
     //public var previousAttributes: [String: Any]?
@@ -79,6 +79,7 @@ public enum EventObject: Codable {
     case promotionCode(PromotionCode)
     case setupIntent(SetupIntent)
     case taxRate(TaxRate)
+    case unknown(String)
 
     public init(from decoder: Decoder) throws {
         let object = try decoder
@@ -110,9 +111,7 @@ public enum EventObject: Codable {
         case "tax_rate":
             self = try .taxRate(TaxRate(from: decoder))
         default:
-            throw DecodingError.keyNotFound(CodingKeys.object,
-                                            DecodingError.Context(codingPath: [CodingKeys.object],
-                                                                  debugDescription: "Missing type '\(object)' cannot be decoded."))
+            self = .unknown(object)
         }
     }
     
@@ -144,6 +143,8 @@ public enum EventObject: Codable {
             try setupIntent.encode(to: encoder)
         case .taxRate(let taxRate):
             try taxRate.encode(to: encoder)
+        case .unknown:
+            break
         }
     }
     
