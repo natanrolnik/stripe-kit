@@ -46,8 +46,6 @@ public struct PaymentLink: Codable {
     public var invoiceCreation: PaymentLinkInvoiceCreation?
     /// Has the value true if the object exists in live mode or the value false if the object exists in test mode.
     public var livemode: Bool?
-    /// The account on behalf of which to charge. See the Connect documentation for details.
-    @Expandable<ConnectAccount> public var onBehalfOf: String?
     /// Indicates the parameters to be passed to PaymentIntent creation during checkout.
     public var paymentIntentData: PaymentLinkPaymentIntentData?
     /// Configuration for collecting a payment method during checkout.
@@ -66,8 +64,6 @@ public struct PaymentLink: Codable {
     public var subscriptionData: PaymentLinkSubscriptionData?
     /// Details on the state of tax ID collection for the payment link.
     public var taxIdCollection: PaymentLinkTaxIdCollection?
-    /// The account (if any) the payments will be attributed to for tax reporting, and where funds from each payment will be transferred to.
-    public var transferData: PaymentLinkTransferData?
     
     public init(id: String,
                 active: Bool? = nil,
@@ -97,8 +93,8 @@ public struct PaymentLink: Codable {
                 shippingOptions: [PaymentLinkShippingOption]? = nil,
                 submitType: PaymentLinkSubmitType? = nil,
                 subscriptionData: PaymentLinkSubscriptionData? = nil,
-                taxIdCollection: PaymentLinkTaxIdCollection? = nil,
-                transferData: PaymentLinkTransferData? = nil) {
+                taxIdCollection: PaymentLinkTaxIdCollection? = nil
+    ) {
         self.id = id
         self.active = active
         self.lineItems = lineItems
@@ -118,7 +114,6 @@ public struct PaymentLink: Codable {
         self.customerCreation = customerCreation
         self.invoiceCreation = invoiceCreation
         self.livemode = livemode
-        self._onBehalfOf = Expandable(id: onBehalfOf)
         self.paymentIntentData = paymentIntentData
         self.paymentMethodCollection = paymentMethodCollection
         self.paymentMethodTypes = paymentMethodTypes
@@ -128,7 +123,6 @@ public struct PaymentLink: Codable {
         self.submitType = submitType
         self.subscriptionData = subscriptionData
         self.taxIdCollection = taxIdCollection
-        self.transferData = transferData
     }
 }
 
@@ -468,8 +462,6 @@ public struct PaymentLinkInvoiceCreation: Codable {
 }
 
 public struct PaymentLinkInvoiceCreationInvoiceData: Codable {
-    /// The account tax IDs associated with the invoice
-    @ExpandableCollection<TaxID> public var accountTaxIds: [String]?
     /// Custom fields displayed on the invoice.
     public var customFields: [PaymentLinkInvoiceCreationInvoiceDataCustomFields]?
     /// An arbitrary string attached to the object. Often useful for displaying to users.
@@ -487,7 +479,6 @@ public struct PaymentLinkInvoiceCreationInvoiceData: Codable {
                 footer: String? = nil,
                 metadata: [String : String]? = nil,
                 renderingOptions: PaymentLinkInvoiceCreationInvoiceDataRenderingOptions? = nil) {
-        self._accountTaxIds = ExpandableCollection(ids: accountTaxIds)
         self.customFields = customFields
         self.description = description
         self.footer = footer
@@ -608,18 +599,6 @@ public struct PaymentLinkTaxIdCollection: Codable {
     
     public init(enabled: Bool? = nil) {
         self.enabled = enabled
-    }
-}
-
-public struct PaymentLinkTransferData: Codable {
-    /// The amount in cents that will be transferred to the destination account. By default, the entire amount is transferred to the destination.
-    public var amount: Int?
-    /// The connected account receiving the transfer.
-    @Expandable<ConnectAccount> public var destination: String?
-    
-    public init(amount: Int? = nil, destination: String? = nil) {
-        self.amount = amount
-        self._destination = Expandable(id: destination)
     }
 }
 

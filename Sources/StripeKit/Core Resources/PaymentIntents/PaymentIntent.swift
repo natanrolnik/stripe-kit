@@ -25,14 +25,10 @@ public struct PaymentIntent: Codable {
     public var description: String?
     /// The payment error encountered in the previous PaymentIntent confirmation.
     public var lastPaymentError: StripeError?
-    /// The latest charge created by this payment intent.
-    @Expandable<Charge> public var latestCharge: String?
     /// Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
     public var metadata: [String: String]?
     /// If present, this property tells you what actions you need to take in order for your customer to fulfill a payment using the provided source.
     public var nextAction: PaymentIntentNextAction?
-    /// ID of the payment method used in this PaymentIntent.
-    @Expandable<PaymentMethod> public var paymentMethod: String?
     /// Email address that the receipt for the resulting payment will be sent to.
     public var receiptEmail: String?
     /// Indicates that you intend to make future payments with this PaymentIntent’s payment method. If present, the payment method used with this PaymentIntent can be attached to a Customer, even after the transaction completes. Use `on_session` if you intend to only reuse the payment method when your customer is present in your checkout flow. Use `off_session` if your customer may or may not be in your checkout flow. For more, learn to save card details after a payment. Stripe uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules. For example, if your customer is impacted by SCA, using `off_session` will ensure that they are authenticated while processing this PaymentIntent. You will then be able to collect off-session payments for this customer.
@@ -67,20 +63,14 @@ public struct PaymentIntent: Codable {
     public var confirmationMethod: PaymentIntentConfirmationMethod?
     /// Time at which the object was created. Measured in seconds since the Unix epoch.
     public var created: Date
-    /// ID of the invoice that created this PaymentIntent, if it exists.
-    @Expandable<Invoice> public var invoice: String?
     /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
     public var livemode: Bool?
-    /// The account (if any) for which the funds of the PaymentIntent are intended. See the PaymentIntents Connect usage guide for details.
-    @Expandable<ConnectAccount> public var onBehalfOn: String?
     /// Payment-method-specific configuration for this PaymentIntent.
     public var paymentMethodOptions: PaymentIntentPaymentMethodOptions?
     /// The list of payment method types (e.g. card) that this PaymentIntent is allowed to use.
     public var paymentMethodTypes: [String]?
     /// If present, this property tells you about the processing state of the payment.
     public var processing: PaymentIntentProcessing?
-    /// ID of the review associated with this PaymentIntent, if any.
-    @Expandable<Review> public var review: String?
     /// The data with which to automatically create a Transfer when the payment is finalized. See the PaymentIntents Connect usage guide for details.
     public var transferData: PaymentIntentTransferData?
     /// A string that identifies the resulting payment as part of a group. See the PaymentIntents Connect usage guide for details.
@@ -94,7 +84,6 @@ public struct PaymentIntent: Codable {
                 customer: String? = nil,
                 description: String? = nil,
                 lastPaymentError: StripeError? = nil,
-                latestCharge: String? = nil,
                 metadata: [String : String]? = nil,
                 nextAction: PaymentIntentNextAction? = nil,
                 paymentMethod: String? = nil,
@@ -132,10 +121,8 @@ public struct PaymentIntent: Codable {
         self._customer = Expandable(id: customer)
         self.description = description
         self.lastPaymentError = lastPaymentError
-        self._latestCharge = Expandable(id: latestCharge)
         self.metadata = metadata
         self.nextAction = nextAction
-        self._paymentMethod = Expandable(id: paymentMethod)
         self.receiptEmail = receiptEmail
         self.setupFutureUsage = setupFutureUsage
         self.shipping = shipping
@@ -153,13 +140,10 @@ public struct PaymentIntent: Codable {
         self.captureMethod = captureMethod
         self.confirmationMethod = confirmationMethod
         self.created = created
-        self._invoice = Expandable(id: invoice)
         self.livemode = livemode
-        self._onBehalfOn = Expandable(id: onBehalfOn)
         self.paymentMethodOptions = paymentMethodOptions
         self.paymentMethodTypes = paymentMethodTypes
         self.processing = processing
-        self._review = Expandable(id: review)
         self.transferData = transferData
         self.transferGroup = transferGroup
     }
@@ -216,12 +200,9 @@ public enum PaymentIntentSetupFutureUsage: String, Codable {
 public struct PaymentIntentTransferData: Codable {
 	/// Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or equivalent in charge currency. The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
     public var amount: Int?
-    /// The account (if any) the payment will be attributed to for tax reporting, and where funds from the payment will be transferred to upon payment success.
-    @Expandable<ConnectAccount> public var destination: String?
     
     public init(amount: Int? = nil, destination: String? = nil) {
         self.amount = amount
-        self._destination = Expandable(id: destination)
     }
 }
 

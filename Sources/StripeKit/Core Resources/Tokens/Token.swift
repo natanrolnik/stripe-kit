@@ -14,10 +14,6 @@ public struct Token: Codable {
     public var id: String
     /// String representing the object’s type. Objects of the same type share the same value.
     public var object: String
-    /// Hash describing the bank account.
-    public var bankAccount: BankAccount?
-    /// Hash describing the card used to make the charge.
-    public var card: Card?
     /// IP address of the client that generated the token.
     public var clientIp: String?
     /// Time at which the object was created. Measured in seconds since the Unix epoch.
@@ -31,8 +27,6 @@ public struct Token: Codable {
     
     public init(id: String,
                 object: String,
-                bankAccount: BankAccount? = nil,
-                card: Card? = nil,
                 clientIp: String? = nil,
                 created: Date,
                 livemode: Bool? = nil,
@@ -40,8 +34,6 @@ public struct Token: Codable {
                 used: Bool? = nil) {
         self.id = id
         self.object = object
-        self.bankAccount = bankAccount
-        self.card = card
         self.clientIp = clientIp
         self.created = created
         self.livemode = livemode

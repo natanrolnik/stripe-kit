@@ -14,8 +14,6 @@ public struct Refund: Codable {
     public var id: String
     /// Amount, in cents.
     public var amount: Int?
-    /// ID of the charge that was refunded.
-    @Expandable<Charge> public var charge: String?
     /// Three-letter ISO currency code, in lowercase. Must be a supported currency.
     public var currency: Currency?
     /// An arbitrary string attached to the object. Often useful for displaying to users. (Available on non-card refunds only)
@@ -30,12 +28,8 @@ public struct Refund: Codable {
     public var status: RefundStatus?
     /// String representing the object’s type. Objects of the same type share the same value.
     public var object: String
-    /// Balance transaction that describes the impact on your account balance.
-    @Expandable<BalanceTransaction> public var balanceTransaction: String?
     /// Time at which the object was created. Measured in seconds since the Unix epoch.
     public var created: Date
-    /// If the refund failed, this balance transaction describes the adjustment made on your account balance that reverses the initial balance transaction.
-    @Expandable<BalanceTransaction> public var failureBalanceTransaction: String?
     ///  the refund failed, the reason for refund failure if known. Possible values are `lost_or_stolen_card`, `expired_or_canceled_card`, `charge_for_pending_refund_disputed`, `insufficient_funds`, `declined`, `merchant_request` or `unknown`.
     public var failureReason: RefundFailureReason?
     /// For payment methods without native refund support (e.g., Konbini, PromptPay), email for the customer to receive refund instructions.
@@ -44,14 +38,9 @@ public struct Refund: Codable {
     public var nextAction: RefundNextAction?
     /// This is the transaction number that appears on email receipts sent for this refund.
     public var receiptNumber: String?
-    /// The transfer reversal that is associated with the refund. Only present if the charge came from another Stripe account. See the Connect documentation for details.
-    @Expandable<TransferReversal> public var sourceTransferReversal: String?
-    /// If the accompanying transfer was reversed, the transfer reversal object. Only applicable if the charge was created using the destination parameter.
-    @Expandable<TransferReversal> public var transferReversal: String?
     
     public init(id: String,
                 amount: Int? = nil,
-                charge: String? = nil,
                 currency: Currency? = nil,
                 description: String? = nil,
                 metadata: [String : String]? = nil,
@@ -59,9 +48,7 @@ public struct Refund: Codable {
                 reason: RefundReason? = nil,
                 status: RefundStatus? = nil,
                 object: String,
-                balanceTransaction: String? = nil,
                 created: Date,
-                failureBalanceTransaction: String? = nil,
                 failureReason: RefundFailureReason? = nil,
                 instructionsEmail: String? = nil,
                 nextAction: RefundNextAction? = nil,
@@ -70,7 +57,6 @@ public struct Refund: Codable {
                 transferReversal: String? = nil) {
         self.id = id
         self.amount = amount
-        self._charge = Expandable(id: charge)
         self.currency = currency
         self.description = description
         self.metadata = metadata
@@ -78,15 +64,11 @@ public struct Refund: Codable {
         self.reason = reason
         self.status = status
         self.object = object
-        self._balanceTransaction = Expandable(id: balanceTransaction)
         self.created = created
-        self._failureBalanceTransaction = Expandable(id: failureBalanceTransaction)
         self.failureReason = failureReason
         self.instructionsEmail = instructionsEmail
         self.nextAction = nextAction
         self.receiptNumber = receiptNumber
-        self._sourceTransferReversal = Expandable(id: sourceTransferReversal)
-        self._transferReversal = Expandable(id: transferReversal)
     }
 }
 

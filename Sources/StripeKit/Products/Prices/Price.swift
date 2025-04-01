@@ -21,8 +21,6 @@ public struct Price: Codable {
     public var nickname: String?
     /// The ID of the product this price is associated with.
     @Expandable<Product> public var product: String?
-    /// The recurring components of a price such as `interval` and `usage_type`.
-    public var recurring: PriceRecurring?
     /// One of `one_time` or `recurring` depending on whether the price is for a one-time purchase or a recurring (subscription) purchase.
     public var type: PriceType?
     /// The unit amount in cents to be charged, represented as a whole integer if possible. Only set if `billing_scheme=per_unit`.
@@ -58,7 +56,6 @@ public struct Price: Codable {
                 metadata: [String : String]? = nil,
                 nickname: String? = nil,
                 product: String? = nil,
-                recurring: PriceRecurring? = nil,
                 type: PriceType? = nil,
                 unitAmount: Int? = nil,
                 object: String,
@@ -79,7 +76,6 @@ public struct Price: Codable {
         self.metadata = metadata
         self.nickname = nickname
         self._product = Expandable(id: product)
-        self.recurring = recurring
         self.type = type
         self.unitAmount = unitAmount
         self.object = object
@@ -95,34 +91,6 @@ public struct Price: Codable {
         self.transformQuantity = transformQuantity
         self.unitAmountDecimal = unitAmountDecimal
     }
-}
-
-public struct PriceRecurring: Codable {
-    /// Specifies a usage aggregation strategy for prices of `usage_type=metered`. Allowed values are sum for summing up all usage during a period, `last_during_period` for using the last usage record reported within a period, `last_ever` for using the last usage record ever (across period bounds) or `max` which uses the usage record with the maximum reported usage during a period. Defaults to `sum`.
-    public var aggregateUsage: PriceRecurringAggregateUsage?
-    /// The frequency at which a subscription is billed. One of `day`, `week`, `month` or `year`.
-    public var interval: PlanInterval?
-    /// The number of intervals (specified in the `interval` attribute) between subscription billings. For example, `interval=month` and `interval_count=3` bills every 3 months.
-    public var intervalCount: Int?
-    /// Configures how the quantity per period should be determined. Can be either `metered` or `licensed`. `licensed` automatically bills the `quantity` set when adding it to a subscription. `metered` aggregates the total usage based on usage records. Defaults to `licensed`.
-    public var usageType: PlanUsageType?
-    
-    public init(aggregateUsage: PriceRecurringAggregateUsage? = nil,
-                interval: PlanInterval? = nil,
-                intervalCount: Int? = nil,
-                usageType: PlanUsageType? = nil) {
-        self.aggregateUsage = aggregateUsage
-        self.interval = interval
-        self.intervalCount = intervalCount
-        self.usageType = usageType
-    }
-}
-    
-public enum PriceRecurringAggregateUsage: String, Codable {
-    case sum
-    case lastDuringPeriod = "last_during_period"
-    case lastEver = "last_ever"
-    case max
 }
 
 public enum PriceType: String, Codable {

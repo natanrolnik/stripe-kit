@@ -28,10 +28,6 @@ public struct SetupAttempt: Codable {
     public var flowDirections: [String]?
     /// Has the value true if the object exists in live mode or the value false if the object exists in test mode.
     public var livemode: Bool?
-    /// The value of `on_behalf_of` on the SetupIntent at the time of this confirmation.
-    @Expandable<ConnectAccount> public var onBehalfOf: String?
-    /// ID of the payment method used with this SetupAttempt.
-    @Expandable<PaymentMethod> public var paymentMethod: String?
     /// Details about the payment method at the time of SetupIntent confirmation.
     public var paymentMethodDetails: SetupAttemptPaymentMethodDetails?
     /// The error encountered during this attempt to confirm the SetupIntent, if any.
@@ -51,8 +47,6 @@ public struct SetupAttempt: Codable {
                 customer: String? = nil,
                 flowDirections: [String]? = nil,
                 livemode: Bool? = nil,
-                onBehalfOf: String? = nil,
-                paymentMethod: String? = nil,
                 paymentMethodDetails: SetupAttemptPaymentMethodDetails? = nil,
                 setupError: _StripeError? = nil,
                 setupIntent: String? = nil,
@@ -66,8 +60,6 @@ public struct SetupAttempt: Codable {
         self._customer = Expandable(id: customer)
         self.flowDirections = flowDirections
         self.livemode = livemode
-        self._onBehalfOf = Expandable(id: onBehalfOf)
-        self._paymentMethod = Expandable(id: paymentMethod)
         self.paymentMethodDetails = paymentMethodDetails
         self.setupError = setupError
         self._setupIntent = Expandable(id: setupIntent)

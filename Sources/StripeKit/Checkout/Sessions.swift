@@ -68,8 +68,6 @@ public struct Session: Codable {
     public var customerDetails: SessionCustomerDetails?
     /// The timestamp at which the Checkout Session will expire
     public var expiresAt: Date?
-    /// ID of the invoice created by the Checkout Session, if it exists.
-    @Expandable<Invoice> public var invoice: String?
     /// Details on the state of invoice creation for the Checkout Session.
     public var invoiceCreation: SessionInvoiceCreation?
     /// Has the `value` true if the object exists in live mode or the value `false` if the object exists in test mode.
@@ -102,8 +100,6 @@ public struct Session: Codable {
     public var shipppingOptions: [SessionShippingOption]?
     /// Describes the type of transaction being performed by Checkout in order to customize relevant text on the page, such as the submit button. `submit_type` can only be specified on Checkout Sessions in `payment` mode, but not Checkout Sessions in `subscription` or `setup` mode.
     public var submitType: SessionSubmitType?
-    /// The ID of the subscription created if one or more plans were provided.
-    @Expandable<Subscription> public var subscription: String?
     /// Details on the state of tax ID collection for the session.
     public var taxIdCollection: SessionTaxIdCollection?
     /// Tax and discount details for the computed total amount.
@@ -156,7 +152,6 @@ public struct Session: Codable {
                 shippingDetails: ShippingLabel? = nil,
                 shipppingOptions: [SessionShippingOption]? = nil,
                 submitType: SessionSubmitType? = nil,
-                subscription: String? = nil,
                 taxIdCollection: SessionTaxIdCollection? = nil,
                 totalDetails: SessionTotalDetails? = nil) {
         self.id = id
@@ -189,7 +184,6 @@ public struct Session: Codable {
         self.customerCreation = customerCreation
         self.customerDetails = customerDetails
         self.expiresAt = expiresAt
-        self._invoice = Expandable(id: invoice)
         self.invoiceCreation = invoiceCreation
         self.livemode = livemode
         self.locale = locale
@@ -206,7 +200,6 @@ public struct Session: Codable {
         self.shippingDetails = shippingDetails
         self.shipppingOptions = shipppingOptions
         self.submitType = submitType
-        self._subscription = Expandable(id: subscription)
         self.taxIdCollection = taxIdCollection
         self.totalDetails = totalDetails
     }
@@ -380,8 +373,6 @@ public struct SessionInvoiceCreation: Codable {
 }
 
 public struct SessionInvoiceCreationInvoiceData: Codable {
-    /// The account tax IDs associated with the invoice
-    @ExpandableCollection<TaxID> public var accountTaxIds: [String]?
     /// Custom fields displayed on the invoice.
     public var customFields: [SessionInvoiceCreationInvoiceDataCustomFields]?
     /// An arbitrary string attached to the object. Often useful for displaying to users.
@@ -393,13 +384,13 @@ public struct SessionInvoiceCreationInvoiceData: Codable {
     /// Options for invoice PDF rendering.
     public var renderingOptions: SessionInvoiceCreationInvoiceDataRenderingOptions?
     
-    public init(accountTaxIds: [String]? = nil,
+    public init(
                 customFields: [SessionInvoiceCreationInvoiceDataCustomFields]? = nil,
                 description: String? = nil,
                 footer: String? = nil,
                 metadata: [String : String]? = nil,
-                renderingOptions: SessionInvoiceCreationInvoiceDataRenderingOptions? = nil) {
-        self._accountTaxIds = ExpandableCollection(ids: accountTaxIds)
+                renderingOptions: SessionInvoiceCreationInvoiceDataRenderingOptions? = nil
+    ) {
         self.customFields = customFields
         self.description = description
         self.footer = footer
@@ -544,33 +535,18 @@ public struct SessionCustomerDetails: Codable {
     public var phone: String?
     /// The customer’s tax exempt status at time of checkout.
     public var taxExempt: String?
-    /// The customer’s tax IDs at time of checkout.
-    public var taxIds: [SessionCustomerDetailsTaxId]?
     
     public init(address: Address? = nil,
                 email: String? = nil,
                 name: String? = nil,
                 phone: String? = nil,
-                taxExempt: String? = nil,
-                taxIds: [SessionCustomerDetailsTaxId]? = nil) {
+                taxExempt: String? = nil
+    ) {
         self.address = address
         self.email = email
         self.name = name
         self.phone = phone
         self.taxExempt = taxExempt
-        self.taxIds = taxIds
-    }
-}
-
-public struct SessionCustomerDetailsTaxId: Codable {
-    /// The type of the tax ID.
-    public var type: TaxIDType
-    /// The value of the tax ID.
-    public var value: String?
-    
-    public init(type: TaxIDType, value: String? = nil) {
-        self.type = type
-        self.value = value
     }
 }
 

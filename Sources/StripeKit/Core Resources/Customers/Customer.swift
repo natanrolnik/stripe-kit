@@ -36,10 +36,6 @@ public struct Customer: Codable {
     public var created: Date
     /// Three-letter ISO code for the currency the customer can be charged in for recurring billing purposes.
     public var currency: Currency?
-    /// ID of the default payment source for the customer.
-    ///
-    /// If you are using payment methods created via the PaymentMethods API, see the `invoice_settings.default_payment_method` field instead.
-    @DynamicExpandable<BankAccount, Card> public var defaultSource: String?
     /// When the customer’s latest invoice is billed by charging automatically, delinquent is true if the invoice’s latest charge is failed. When the customer’s latest invoice is billed by sending an invoice, delinquent is true if the invoice is not paid by its due date.
     public var delinquent: Bool?
     /// Describes the current discount active on the customer, if there is one.
@@ -56,16 +52,8 @@ public struct Customer: Codable {
     public var nextInvoiceSequence: Int?
     /// The customer’s preferred locales (languages), ordered by preference
     public var preferredLocals: [String]?
-    /// The customer’s payment sources, if any.
-    public var sources: StripeSourcesList?
-    /// The customer’s current subscriptions, if any.
-    public var subscriptions: SubscriptionList?
     /// Describes the customer’s tax exemption status. One of `none`, `exempt`, or `reverse`. When set to `reverse`, invoice and receipt PDFs include the text `“Reverse charge”`.
     public var taxExempt: CustomerTaxExempt?
-    /// The customers tax IDs
-    public var taxIds: TaxIDList?
-    /// ID of the test clock this customer belongs to.
-    @Expandable<TestClock> public var testClock: String?
     
     public init(id: String,
                 address: Address? = nil,
@@ -89,11 +77,8 @@ public struct Customer: Codable {
                 livemode: Bool? = nil,
                 nextInvoiceSequence: Int? = nil,
                 preferredLocals: [String]? = nil,
-                sources: StripeSourcesList? = nil,
-                subscriptions: SubscriptionList? = nil,
-                taxExempt: CustomerTaxExempt? = nil,
-                taxIds: TaxIDList? = nil,
-                testClock: String? = nil) {
+                taxExempt: CustomerTaxExempt? = nil
+    ) {
         self.id = id
         self.address = address
         self.description = description
@@ -107,7 +92,6 @@ public struct Customer: Codable {
         self.cashBalance = cashBalance
         self.created = created
         self.currency = currency
-        self._defaultSource = DynamicExpandable(id: defaultSource)
         self.delinquent = delinquent
         self.discount = discount
         self.invoiceCreditBalance = invoiceCreditBalance
@@ -116,11 +100,7 @@ public struct Customer: Codable {
         self.livemode = livemode
         self.nextInvoiceSequence = nextInvoiceSequence
         self.preferredLocals = preferredLocals
-        self.sources = sources
-        self.subscriptions = subscriptions
         self.taxExempt = taxExempt
-        self.taxIds = taxIds
-        self._testClock = Expandable(id: testClock)
     }
 }
 
@@ -164,8 +144,6 @@ public struct CustomerCashBalanceSettings: Codable {
 public struct CustomerInvoiceSettings: Codable {
     /// Default custom fields to be displayed on invoices for this customer.
     public var customFields: [CustomerInvoiceSettingsCustomFields]?
-    /// ID of the default payment method used for subscriptions and invoices for the customer.
-    @Expandable<PaymentMethod> public var defaultPaymentMethod: String?
     /// Default footer to be displayed on invoices for this customer.
     public var footer: String?
     /// Default options for invoice PDF rendering for this customer.
@@ -176,7 +154,6 @@ public struct CustomerInvoiceSettings: Codable {
                 footer: String? = nil,
                 renderingOptions: CustomerInvoiceSettingsRenderingOptions? = nil) {
         self.customFields = customFields
-        self._defaultPaymentMethod = Expandable(id: defaultPaymentMethod)
         self.footer = footer
         self.renderingOptions = renderingOptions
     }

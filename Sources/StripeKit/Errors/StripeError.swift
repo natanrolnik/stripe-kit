@@ -31,10 +31,6 @@ public final class _StripeError: Codable {
     public var param: String?
     /// The PaymentIntent object for errors returned on a request involving a PaymentIntent.
     public var paymentIntent: PaymentIntent?
-    /// The PaymentMethod object for errors returned on a request involving a PaymentMethod.
-    public var paymentMethod: PaymentMethod?
-    /// The source object for errors returned on a request involving a source.
-    public var source: Source?
 }
 
 // https://stripe.com/docs/api#errors-type

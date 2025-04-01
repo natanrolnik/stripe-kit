@@ -66,171 +66,49 @@ public struct EventData: Codable {
 }
 
 public enum EventObject: Codable {
-    case account(ConnectAccount)
-    case application(ConnectApplication)
-    case card(Card)
-    case cashBalance(CashBalance)
-    case bankAccount(BankAccount)
-    case applicationFee(ApplicationFee)
-    case applicationFeeRefund(ApplicationFeeRefund)
-    case balance(Balance)
-    case billingPortalSession(PortalSession)
-    case capability(Capability)
-    case charge(Charge)
-    case dispute(Dispute)
     case refund(Refund)
     case checkoutSession(Session)
-    case configuration(PortalConfiguration)
     case coupon(Coupon)
-    case creditNote(CreditNote)
     case customer(Customer)
     case discount(Discount)
-    case subscription(Subscription)
-    case taxId(TaxID)
     case file(File)
-    case invoice(Invoice)
-    case invoiceItem(InvoiceItem)
-    case issuingAuthorization(Authorization)
-    case issuingCard(IssuingCard)
-    case issuingCardHolder(Cardholder)
-    case issuingDispute(IssuingDispute)
-    case issuingTransaction(Transaction)
-    case mandate(Mandate)
     case paymentIntent(PaymentIntent)
     case paymentLink(PaymentLink)
-    case paymentMethod(PaymentMethod)
-    case payout(Payout)
-    case person(Person)
-    case plan(Plan)
     case price(Price)
     case product(Product)
     case promotionCode(PromotionCode)
-    case earlyFraudWarning(EarlyFraudWarning)
-    case quote(Quote)
-    case reportRun(ReportRun)
-    case reportType(ReportType)
-    case review(Review)
     case setupIntent(SetupIntent)
-    case scheduledQueryRun(ScheduledQueryRun)
-    case subscriptionSchedule(SubscriptionSchedule)
     case taxRate(TaxRate)
-    case topup(TopUp)
-    case transfer(Transfer)
-    case testClock(TestClock)
-    case reader(TerminalReader)
-    case verificationSession(VerificationSession)
-    
+
     public init(from decoder: Decoder) throws {
         let object = try decoder
             .container(keyedBy: CodingKeys.self)
             .decode(String.self, forKey: .object)
         switch object {
-        case "account":
-            self = try .account(ConnectAccount(from: decoder))
-        case "application":
-            self = try .application(ConnectApplication(from: decoder))
-        case "application_fee":
-            self = try .applicationFee(ApplicationFee(from: decoder))
-        case "card":
-            self = try .card(Card(from: decoder))
-        case "cash_balance":
-            self = try .cashBalance(CashBalance(from: decoder))
-        case "bank_account":
-            self = try .bankAccount(BankAccount(from: decoder))
-        case "billing_portal.configuration":
-            self = try .configuration(PortalConfiguration(from: decoder))
-        case "billing_portal.session":
-            self = try .billingPortalSession(PortalSession(from: decoder))
-        case "fee_refund":
-            self = try .applicationFeeRefund(ApplicationFeeRefund(from: decoder))
-        case "balance":
-            self = try .balance(Balance(from: decoder))
-        case "capability":
-            self = try .capability(Capability(from: decoder))
-        case "charge":
-            self = try .charge(Charge(from: decoder))
-        case "dispute":
-            self = try .dispute(Dispute(from: decoder))
-        case "refund":
-            self = try .refund(Refund(from: decoder))
         case "checkout.session":
             self = try .checkoutSession(Session(from: decoder))
         case "coupon":
             self = try .coupon(Coupon(from: decoder))
-        case "credit_note":
-            self = try .creditNote(CreditNote(from: decoder))
         case "customer":
             self = try .customer(Customer(from: decoder))
         case "discount":
             self = try .discount(Discount(from: decoder))
-        case "subscription":
-            self = try .subscription(Subscription(from: decoder))
-        case "tax_id":
-            self = try .taxId(TaxID(from: decoder))
         case "file":
             self = try .file(File(from: decoder))
-        case "identity.verification_session":
-            self = try .verificationSession(VerificationSession(from: decoder))
-        case "invoice":
-            self = try .invoice(Invoice(from: decoder))
-        case "invoiceitem":
-            self = try .invoiceItem(InvoiceItem(from: decoder))
-        case "issuing.authorization":
-            self = try .issuingAuthorization(Authorization(from: decoder))
-        case "issuing.card":
-            self = try .issuingCard(IssuingCard(from: decoder))
-        case "issuing.cardholder":
-            self = try .issuingCardHolder(Cardholder(from: decoder))
-        case "issuing.dispute":
-            self = try .issuingDispute(IssuingDispute(from: decoder))
-        case "issuing.transaction":
-            self = try .issuingTransaction(Transaction(from: decoder))
-        case "mandate":
-            self = try .mandate(Mandate(from: decoder))
         case "payment_intent":
             self = try .paymentIntent(PaymentIntent(from: decoder))
         case "payment_link":
             self = try .paymentLink(PaymentLink(from: decoder))
-        case "payment_method":
-            self = try .paymentMethod(PaymentMethod(from: decoder))
-        case "payout":
-            self = try .payout(Payout(from: decoder))
-        case "person":
-            self = try .person(Person(from: decoder))
-        case "plan":
-            self = try .plan(Plan(from: decoder))
         case "price":
             self = try .price(Price(from: decoder))
         case "product":
             self = try .product(Product(from: decoder))
         case "promotion_code":
             self = try .promotionCode(PromotionCode(from: decoder))
-        case "radar.early_fraud_warning":
-            self = try .earlyFraudWarning(EarlyFraudWarning(from: decoder))
-        case "quote":
-            self = try .quote(Quote(from: decoder))
-        case "reporting.report_run":
-            self = try .reportRun(ReportRun(from: decoder))
-        case "reporting.report_type":
-            self = try .reportType(ReportType(from: decoder))
-        case "review":
-            self = try .review(Review(from: decoder))
         case "setup_intent":
             self = try .setupIntent(SetupIntent(from: decoder))
-        case "scheduled_query_run":
-            self = try .scheduledQueryRun(ScheduledQueryRun(from: decoder))
-        case "subscription_schedule":
-            self = try .subscriptionSchedule(SubscriptionSchedule(from: decoder))
         case "tax_rate":
             self = try .taxRate(TaxRate(from: decoder))
-        case "test_helpers.test_clock":
-            self = try .testClock(TestClock(from: decoder))
-        case "terminal.reader":
-            self = try .reader(TerminalReader(from: decoder))
-        case "topup":
-            self = try .topup(TopUp(from: decoder))
-        case "transfer":
-            self = try .transfer(Transfer(from: decoder))
         default:
             throw DecodingError.keyNotFound(CodingKeys.object,
                                             DecodingError.Context(codingPath: [CodingKeys.object],
@@ -240,112 +118,32 @@ public enum EventObject: Codable {
     
     public func encode(to encoder: Encoder) throws {
         switch self {
-        case .account(let connectAccount):
-            try connectAccount.encode(to: encoder)
-        case .application(let connectApplication):
-            try connectApplication.encode(to: encoder)
-        case .card(let card):
-            try card.encode(to: encoder)
-        case .cashBalance(let cashBalance):
-            try cashBalance.encode(to: encoder)
-        case .bankAccount(let bankAccount):
-            try bankAccount.encode(to: encoder)
-        case .billingPortalSession(let portalSession):
-            try portalSession.encode(to: encoder)
-        case .applicationFee(let applicationFee):
-            try applicationFee.encode(to: encoder)
-        case .applicationFeeRefund(let applicationFeeRefund):
-            try applicationFeeRefund.encode(to: encoder)
-        case .balance(let balance):
-            try balance.encode(to: encoder)
-        case .capability(let capability):
-            try capability.encode(to: encoder)
-        case .charge(let charge):
-            try charge.encode(to: encoder)
-        case .dispute(let dispute):
-            try dispute.encode(to: encoder)
         case .refund(let refund):
             try refund.encode(to: encoder)
         case .checkoutSession(let session):
             try session.encode(to: encoder)
-        case .configuration(let portalConfiguration):
-            try portalConfiguration.encode(to: encoder)
         case .coupon(let coupon):
             try coupon.encode(to: encoder)
-        case .creditNote(let creditNote):
-            try creditNote.encode(to: encoder)
         case .customer(let customer):
             try customer.encode(to: encoder)
         case .discount(let discount):
             try discount.encode(to: encoder)
-        case .subscription(let subscription):
-            try subscription.encode(to: encoder)
-        case .taxId(let taxID):
-            try taxID.encode(to: encoder)
         case .file(let file):
             try file.encode(to: encoder)
-        case .invoice(let invoice):
-            try invoice.encode(to: encoder)
-        case .invoiceItem(let invoiceItem):
-            try invoiceItem.encode(to: encoder)
-        case .issuingAuthorization(let authorization):
-            try authorization.encode(to: encoder)
-        case .issuingCard(let issuingCard):
-            try issuingCard.encode(to: encoder)
-        case .issuingCardHolder(let cardholder):
-            try cardholder.encode(to: encoder)
-        case .issuingDispute(let issuingDispute):
-            try issuingDispute.encode(to: encoder)
-        case .issuingTransaction(let transaction):
-            try transaction.encode(to: encoder)
-        case .mandate(let mandate):
-            try mandate.encode(to: encoder)
         case .paymentIntent(let paymentIntent):
             try paymentIntent.encode(to: encoder)
         case .paymentLink(let paymentLink):
             try paymentLink.encode(to: encoder)
-        case .paymentMethod(let paymentMethod):
-            try paymentMethod.encode(to: encoder)
-        case .payout(let payout):
-            try payout.encode(to: encoder)
-        case .person(let person):
-            try person.encode(to: encoder)
-        case .plan(let plan):
-            try plan.encode(to: encoder)
         case .price(let price):
             try price.encode(to: encoder)
         case .product(let product):
             try product.encode(to: encoder)
         case .promotionCode(let promotionCode):
             try promotionCode.encode(to: encoder)
-        case .earlyFraudWarning(let earlyFraudWarning):
-            try earlyFraudWarning.encode(to: encoder)
-        case .quote(let quote):
-            try quote.encode(to: encoder)
-        case .reportRun(let reportRun):
-            try reportRun.encode(to: encoder)
-        case .reportType(let reportType):
-            try reportType.encode(to: encoder)
-        case .review(let review):
-            try review.encode(to: encoder)
         case .setupIntent(let setupIntent):
             try setupIntent.encode(to: encoder)
-        case .scheduledQueryRun(let scheduledQueryRun):
-            try scheduledQueryRun.encode(to: encoder)
-        case .subscriptionSchedule(let subscriptionSchedule):
-            try subscriptionSchedule.encode(to: encoder)
         case .taxRate(let taxRate):
             try taxRate.encode(to: encoder)
-        case .topup(let topUp):
-            try topUp.encode(to: encoder)
-        case .transfer(let transfer):
-            try transfer.encode(to: encoder)
-        case .testClock(let testClock):
-            try testClock.encode(to: encoder)
-        case .reader(let terminalReader):
-            try terminalReader.encode(to: encoder)
-        case .verificationSession(let verificationSession):
-            try verificationSession.encode(to: encoder)
         }
     }
     
